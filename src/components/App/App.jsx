@@ -8,8 +8,8 @@ function App() {
     <div className="app">
       <DuelGame />
       <div className="controls-container">
-        <HeroControls />
-        <HeroControls />
+        <HeroControls playerId="player-1" />
+        <HeroControls playerId="player-2" />
       </div>
     </div>
   );

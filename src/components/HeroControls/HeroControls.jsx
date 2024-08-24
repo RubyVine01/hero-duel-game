@@ -1,31 +1,18 @@
 import { useState } from "react";
 import "./HeroControls.css";
+import RangeInput from "../RangeInput/RangeInput";
 
-const HeroControls = () => {
-  const [rangeValue, setRangeValue] = useState(0);
-
-  const handleRangeChange = (event) => {
-    setRangeValue(event.target.value);
-  };
-
+const HeroControls = ({playerId}) => {
   return (
     <div className="hero-controls-container">
       <h2>Hero controls</h2>
-      <div className="rate-input__container">
-        <input
-          id="range"
-          type="range"
-          min="1"
-          max="5"
-          step={1}
-          className="rate-input"
-          value={rangeValue}
-          onChange={handleRangeChange}
-        />
-        <label for="range" className="rate-input__label">
-          {`Rate: ${rangeValue}`}
-        </label>
-      </div>
+      <RangeInput labelName="Speed" min={1} max={5} id={`speed-${playerId}`} />
+      <RangeInput
+        labelName="Fire Rate"
+        min={1}
+        max={8}
+        id={`fire-rate-${playerId}`}
+      />
     </div>
   );
 };
