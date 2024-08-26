@@ -1,36 +1,37 @@
 import "./DuelGame.css";
 import Hero from "../../entities/Hero";
-
 import { useEffect, useRef, useState } from "react";
 
 const DuelGame = () => {
   const canvasRef = useRef();
+  const hero1Ref = useRef();
+  const hero2Ref = useRef();
   const [hero1Settings, setHero1Settings] = useState({
-    speed: 2,
+    speed: 0.5,
     spells: 1000,
     color: "red",
   });
 
   const [hero2Settings, setHero2Settings] = useState({
-    speed: 3,
+    speed: 0.5,
     spells: 1000,
     color: "blue",
   });
 
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+  const mousePosition = useRef({ x: 0, y: 0 });
 
   useEffect(() => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
 
-    const hero1 = new Hero(
+    hero1Ref.current = new Hero(
       context,
-      100,
+      50,
       canvas.height / 2,
       hero1Settings.color,
       hero1Settings
     );
-    const hero2 = new Hero(
+    hero2Ref.current = new Hero(
       context,
       canvas.width - 50,
       canvas.height / 2,
@@ -40,17 +41,17 @@ const DuelGame = () => {
 
     const handleMouseMove = (e) => {
       const rect = canvas.getBoundingClientRect();
-      setMousePosition({ x: e.clientX - rect.left, y: e.clientY - rect.top });
+      mousePosition.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
     };
 
     const animate = () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
-      hero1.checkMouseCollision(mousePosition);
-      hero2.checkMouseCollision(mousePosition);
-      hero1.update();
-      hero2.update();
-      hero1.draw();
-      hero2.draw();
+      hero1Ref.current.checkMouseCollision(mousePosition.current);
+      hero2Ref.current.checkMouseCollision(mousePosition.current);
+      hero1Ref.current.update();
+      hero2Ref.current.update();
+      hero1Ref.current.draw();
+      hero2Ref.current.draw();
       requestAnimationFrame(animate);
     };
 
@@ -59,9 +60,17 @@ const DuelGame = () => {
 
     return () => {
       canvas.removeEventListener("mousemove", handleMouseMove);
-      cancelAnimationFrame(animate);
     };
-  }, [hero1Settings, hero2Settings, mousePosition]);
+  }, []);
+
+  useEffect(() => {
+    if (hero1Ref.current) {
+      hero1Ref.current.updateSettings(hero1Settings);
+    }
+    if (hero2Ref.current) {
+      hero2Ref.current.updateSettings(hero2Settings);
+    }
+  }, [hero1Settings, hero2Settings]);
 
   return (
     <canvas ref={canvasRef} width={800} height={400} className="playground" />

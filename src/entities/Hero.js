@@ -29,13 +29,33 @@ export default class Hero {
       this.direction *= -1;
     }
   }
-
   checkMouseCollision(mousePosition) {
-    const distance = Math.sqrt(
-      (mousePosition.x - this.x) ** 2 + (mousePosition.y - this.y) ** 2
-    );
-    if (distance <= this.radius + 10) {
-      this.direction *= -1;
+
+    const dx = mousePosition.x - this.x;
+    const dy = mousePosition.y - this.y;
+    const distance = Math.sqrt(dx * dx + dy * dy);
+  
+
+    if (distance < this.radius + 10) {
+      if (Math.abs(dx) > Math.abs(dy)) {
+   
+        this.direction = dx > 0 ? -1 : 1;
+      } else {
+
+        this.direction = dy > 0 ? -1 : 1;
+      }
+    }
+  }
+
+  updateSettings(newSettings) {
+    if (newSettings.speed !== undefined) {
+      this.speed = newSettings.speed;
+    }
+    if (newSettings.spells !== undefined) {
+      this.spells = newSettings.spells;
+    }
+    if (newSettings.color !== undefined) {
+      this.color = newSettings.color;
     }
   }
 }
