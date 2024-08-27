@@ -8,13 +8,13 @@ const DuelGame = () => {
   const hero2Ref = useRef();
   const [hero1Settings, setHero1Settings] = useState({
     speed: 0.5,
-    spells: 1000,
+    spells: 500,
     color: "red",
   });
 
   const [hero2Settings, setHero2Settings] = useState({
     speed: 0.5,
-    spells: 1000,
+    spells: 500,
     color: "blue",
   });
 
@@ -41,17 +41,25 @@ const DuelGame = () => {
 
     const handleMouseMove = (e) => {
       const rect = canvas.getBoundingClientRect();
-      mousePosition.current = { x: e.clientX - rect.left, y: e.clientY - rect.top };
+      mousePosition.current = {
+        x: e.clientX - rect.left,
+        y: e.clientY - rect.top,
+      };
     };
 
     const animate = () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
+
       hero1Ref.current.checkMouseCollision(mousePosition.current);
       hero2Ref.current.checkMouseCollision(mousePosition.current);
-      hero1Ref.current.update();
-      hero2Ref.current.update();
+      hero1Ref.current.update(hero2Ref.current);
+      hero2Ref.current.update(hero1Ref.current);
       hero1Ref.current.draw();
       hero2Ref.current.draw();
+
+      hero1Ref.current.checkSpellsCollision(hero2Ref.current);
+      hero2Ref.current.checkSpellsCollision(hero1Ref.current);
+
       requestAnimationFrame(animate);
     };
 
