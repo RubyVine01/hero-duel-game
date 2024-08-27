@@ -1,22 +1,13 @@
+import { observer } from "mobx-react-lite";
 import "./DuelGame.css";
 import Hero from "../../entities/Hero";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef } from "react";
+import heroStore from "../../store/HeroStore";
 
-const DuelGame = () => {
+const DuelGame = observer(() => {
   const canvasRef = useRef();
-  const hero1Ref = useRef();
-  const hero2Ref = useRef();
-  const [hero1Settings, setHero1Settings] = useState({
-    speed: 0.5,
-    spells: 500,
-    color: "red",
-  });
-
-  const [hero2Settings, setHero2Settings] = useState({
-    speed: 0.5,
-    spells: 500,
-    color: "blue",
-  });
+  const leftHeroRef = useRef();
+  const rightHeroRef = useRef();
 
   const mousePosition = useRef({ x: 0, y: 0 });
 
@@ -24,19 +15,18 @@ const DuelGame = () => {
     const canvas = canvasRef.current;
     const context = canvas.getContext("2d");
 
-    hero1Ref.current = new Hero(
+    leftHeroRef.current = new Hero(
       context,
       50,
       canvas.height / 2,
-      hero1Settings.color,
-      hero1Settings
+      heroStore.heroSettings.left
     );
-    hero2Ref.current = new Hero(
+
+    rightHeroRef.current = new Hero(
       context,
       canvas.width - 50,
       canvas.height / 2,
-      hero2Settings.color,
-      hero2Settings
+      heroStore.heroSettings.right
     );
 
     const handleMouseMove = (e) => {
@@ -50,15 +40,15 @@ const DuelGame = () => {
     const animate = () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
 
-      hero1Ref.current.checkMouseCollision(mousePosition.current);
-      hero2Ref.current.checkMouseCollision(mousePosition.current);
-      hero1Ref.current.update(hero2Ref.current);
-      hero2Ref.current.update(hero1Ref.current);
-      hero1Ref.current.draw();
-      hero2Ref.current.draw();
+      leftHeroRef.current.checkMouseCollision(mousePosition.current);
+      rightHeroRef.current.checkMouseCollision(mousePosition.current);
+      leftHeroRef.current.update(rightHeroRef.current);
+      rightHeroRef.current.update(leftHeroRef.current);
+      leftHeroRef.current.draw();
+      rightHeroRef.current.draw();
 
-      hero1Ref.current.checkSpellsCollision(hero2Ref.current);
-      hero2Ref.current.checkSpellsCollision(hero1Ref.current);
+      leftHeroRef.current.checkSpellsCollision(rightHeroRef.current);
+      rightHeroRef.current.checkSpellsCollision(leftHeroRef.current);
 
       requestAnimationFrame(animate);
     };
@@ -72,17 +62,22 @@ const DuelGame = () => {
   }, []);
 
   useEffect(() => {
-    if (hero1Ref.current) {
-      hero1Ref.current.updateSettings(hero1Settings);
+    if (leftHeroRef.current) {
+      leftHeroRef.current.updateSettings(heroStore.heroSettings.left);
     }
-    if (hero2Ref.current) {
-      hero2Ref.current.updateSettings(hero2Settings);
+    if (rightHeroRef.current) {
+      rightHeroRef.current.updateSettings(heroStore.heroSettings.right);
     }
-  }, [hero1Settings, hero2Settings]);
+  }, [
+    heroStore.heroSettings.left.heroSpeed,
+    heroStore.heroSettings.left.fireRate,
+    heroStore.heroSettings.right.heroSpeed,
+    heroStore.heroSettings.right.fireRate,
+  ]);
 
   return (
     <canvas ref={canvasRef} width={800} height={400} className="playground" />
   );
-};
+});
 
 export default DuelGame;

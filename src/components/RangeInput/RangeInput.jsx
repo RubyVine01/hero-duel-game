@@ -1,11 +1,13 @@
 import { useState } from "react";
 import "./RangeInput.css";
 
-const RangeInput = ({ id, labelName, min, max }) => {
-  const [rangeValue, setRangeValue] = useState(1);
+const RangeInput = ({ id, labelName, min, max, onChange, step }) => {
+  const [rangeValue, setRangeValue] = useState(min);
 
   const handleRangeChange = (event) => {
-    setRangeValue(event.target.value);
+    const value = event.target.value;
+    setRangeValue(value);
+    onChange(value);
   };
 
   return (
@@ -15,7 +17,7 @@ const RangeInput = ({ id, labelName, min, max }) => {
         type="range"
         min={min}
         max={max}
-        step={1}
+        step={step}
         className="range-input"
         value={rangeValue}
         onChange={handleRangeChange}

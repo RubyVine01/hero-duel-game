@@ -1,13 +1,14 @@
 export default class Spell {
-  constructor(context, x, y, direction, color, speed = 3) {
+  constructor(context, x, y, direction, settings) {
     this.context = context;
-    this.x = x;
+    this.x = x ;
     this.y = y;
-    this.color = color;
+    this.spellСolor = settings.spellСolor;
     this.radius = 5;
-    this.speed = speed;
+    this.speed = 1
     this.direction = direction;
     this.isActive = true;
+    this.settings = settings
   }
 
   update() {
@@ -21,7 +22,7 @@ export default class Spell {
   draw() {
     this.context.beginPath();
     this.context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    this.context.fillStyle = this.color;
+    this.context.fillStyle = this.spellСolor;
     this.context.fill();
     this.context.closePath();
   }
@@ -37,7 +38,7 @@ export default class Spell {
     const explosionRadius = this.radius * 3;
     this.context.beginPath();
     this.context.arc(this.x, this.y, explosionRadius, 0, Math.PI * 2, false);
-    this.context.fillStyle = this.color;
+    this.context.fillStyle = this.spellСolor;
     this.context.fill();
     this.context.closePath();
   }

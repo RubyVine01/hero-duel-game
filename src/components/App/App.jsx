@@ -1,5 +1,5 @@
 import "./App.css";
-
+import heroStore from "../../store/HeroStore";
 import DuelGame from "../DuelGame/DuelGame";
 import HeroControls from "../HeroControls/HeroControls";
 
@@ -8,8 +8,8 @@ function App() {
     <div className="app">
       <DuelGame />
       <div className="controls-container">
-        <HeroControls playerId="player-1" />
-        <HeroControls playerId="player-2" />
+        <HeroControls position={heroStore.heroSettings["left"].side} />
+        <HeroControls position={heroStore.heroSettings["right"].side} />
       </div>
     </div>
   );

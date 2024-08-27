@@ -1,27 +1,28 @@
 import Spell from "./Spell";
 
 export default class Hero {
-  constructor(context, x, y, color, settings) {
+  constructor(context, x, y, settings) {
     this.context = context;
     this.x = x;
     this.y = y;
-    this.color = color;
+    this.settings = settings;
+    this.heroColor = settings.heroColor;
     this.radius = 20;
-    this.speed = settings.speed;
+    this.heroSpeed = settings.heroSpeed;
     this.direction = 1;
     this.spells = [];
     this.lastShotTime = 0;
-    this.shotInterval = settings.spells || 150;
-    this.settings = settings;
+    this.fireRate = settings.fireRate;
     this.score = 0;
     this.isHit = false;
     this.hitEffectDuration = 0;
+    this.spellСolor = settings.spellСolor;
   }
 
   draw() {
     this.context.beginPath();
     this.context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    this.context.fillStyle = this.color;
+    this.context.fillStyle = this.heroColor;
     this.context.fill();
     this.context.closePath();
 
@@ -36,7 +37,7 @@ export default class Hero {
   }
 
   update(opponent) {
-    this.y += this.speed * this.direction;
+    this.y += this.heroSpeed * this.direction;
     if (
       this.y + this.radius > this.context.canvas.height ||
       this.y - this.radius < 0
@@ -45,7 +46,7 @@ export default class Hero {
     }
 
     const now = Date.now();
-    if (now - this.lastShotTime > this.shotInterval) {
+    if (now - this.lastShotTime > this.fireRate) {
       this.shoot(opponent);
       this.lastShotTime = now;
     }
@@ -72,21 +73,33 @@ export default class Hero {
   }
 
   updateSettings(newSettings) {
-    if (newSettings.speed !== undefined) {
-      this.speed = newSettings.speed;
+    if (newSettings.heroSpeed !== undefined) {
+      this.heroSpeed = newSettings.heroSpeed;
     }
-    if (newSettings.spells !== undefined && Array.isArray(newSettings.spells)) {
-      this.spells = newSettings.spells;
-    }
-    if (newSettings.color !== undefined) {
-      this.color = newSettings.color;
+    if (newSettings.fireRate !== undefined) {
+      this.fireRate = newSettings.fireRate;
     }
   }
 
   shoot(opponent) {
     const direction = this.x < opponent.x ? 1 : -1;
+
+    let offsetX;
+    if (this.settings.side === "left") {
+      offsetX = this.radius + 5;
+    } else if (this.settings.side === "right") {
+      offsetX = -(this.radius + 5);
+    }
+
     this.spells.push(
-      new Spell(this.context, this.x, this.y, direction, this.color)
+      new Spell(
+        this.context,
+        this.x + offsetX,
+        this.y,
+        direction,
+        this.settings,
+        this.spellСolor
+      )
     );
   }
 
@@ -104,6 +117,5 @@ export default class Hero {
     this.isHit = true;
     this.hitEffectDuration = 20; // Длительность эффекта удара
     this.score += 1;
-    console.log(`${this.color}: ${this.score}`);
   }
 }
