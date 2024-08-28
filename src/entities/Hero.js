@@ -1,4 +1,5 @@
 import Spell from "./Spell";
+import heroStore from "../store/HeroStore";
 
 export default class Hero {
   constructor(context, x, y, settings) {
@@ -13,7 +14,7 @@ export default class Hero {
     this.spells = [];
     this.lastShotTime = 0;
     this.fireRate = settings.fireRate;
-    this.score = 0;
+    this.score = settings.score;
     this.isHit = false;
     this.hitEffectDuration = 0;
     this.spellСolor = settings.spellСolor;
@@ -23,6 +24,13 @@ export default class Hero {
     this.context.beginPath();
     this.context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
     this.context.fillStyle = this.heroColor;
+    this.context.stroke();
+    this.context.fill();
+    this.context.closePath();
+
+    this.context.beginPath();
+    this.context.arc(this.x, this.y, this.radius/2, 0, Math.PI * 2, false);
+    this.context.fillStyle = "white";
     this.context.fill();
     this.context.closePath();
 
@@ -134,6 +142,7 @@ export default class Hero {
   hit() {
     this.isHit = true;
     this.hitEffectDuration = 10; // Длительность эффекта удара
-    this.score += 1;
+    // this.score += 1;
+    heroStore.incrementScore(this.settings.scoreSide);
   }
 }
