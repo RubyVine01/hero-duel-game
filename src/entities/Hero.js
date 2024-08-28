@@ -34,19 +34,31 @@ export default class Hero {
         this.spells.splice(index, 1);
       }
     });
+    if (this.hitEffectDuration > 0) {
+      this.hitEffectDuration -= 1;
+      if (this.hitEffectDuration === 0) {
+        this.isHit = false; // Отключаем эффект удара после завершения
+      }
+    }
   }
 
   update(opponent) {
     this.y += this.heroSpeed * this.direction;
-    if (
-      this.y + this.radius > this.context.canvas.height ||
-      this.y - this.radius < 0
-    ) {
+
+    if (this.y + this.radius > this.context.canvas.height) {
+      this.y = this.context.canvas.height - this.radius;
+      this.direction *= -1;
+    }
+    if (this.y - this.radius < 0) {
+      this.y = this.radius;
       this.direction *= -1;
     }
 
     const now = Date.now();
-    if (now - this.lastShotTime > this.fireRate) {
+
+    const shotInterval = 60000 / this.fireRate;
+
+    if (now - this.lastShotTime > shotInterval) {
       this.shoot(opponent);
       this.lastShotTime = now;
     }
@@ -68,6 +80,12 @@ export default class Hero {
         this.direction = dx > 0 ? -1 : 1;
       } else {
         this.direction = dy > 0 ? -1 : 1;
+      }
+      if (this.y + this.radius > this.context.canvas.height) {
+        this.y = this.context.canvas.height - this.radius;
+      }
+      if (this.y - this.radius < 0) {
+        this.y = this.radius;
       }
     }
   }
@@ -115,7 +133,7 @@ export default class Hero {
 
   hit() {
     this.isHit = true;
-    this.hitEffectDuration = 20; // Длительность эффекта удара
+    this.hitEffectDuration = 10; // Длительность эффекта удара
     this.score += 1;
   }
 }

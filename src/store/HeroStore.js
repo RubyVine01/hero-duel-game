@@ -3,17 +3,17 @@ import { makeAutoObservable } from "mobx";
 class HeroStore {
   heroSettings = {
     left: {
-      heroSpeed: 0.5,
-      heroColor: "red",
-      fireRate: 500,
-      spellСolor: "black",
+      heroSpeed: 0,
+      heroColor: "#33CCCC",
+      fireRate: 0,
+      spellСolor: "#FFA500",
       side: "left",
     },
     right: {
-      heroSpeed: 0.5,
-      heroColor: "blue",
-      fireRate: 500,
-      spellСolor: "orange",
+      heroSpeed: 0,
+      heroColor: "#FF69B4",
+      fireRate: 0,
+      spellСolor: "#32CD32",
       side: "right",
     },
   };

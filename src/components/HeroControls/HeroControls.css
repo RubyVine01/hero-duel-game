@@ -1,11 +1,12 @@
 .hero-controls-container {
-  margin: 0 30px;
   background-color: #2c3e50;
   padding: 20px 40px;
   border-radius: 10px;
   box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   width: 280px;
+  border: 10px solid #000000;
 }
+
 
 .controls-container h2 {
   margin: 0;

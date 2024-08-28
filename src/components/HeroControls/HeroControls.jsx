@@ -11,7 +11,6 @@ const HeroControls = observer(({ position }) => {
 
   const handleFireRateChange = (fireRate) => {
     heroStore.setHeroFireRate(position, fireRate);
-    console.log(`${position} ${heroStore.heroSettings[position].fireRate}`);
   };
 
   return (
@@ -19,18 +18,20 @@ const HeroControls = observer(({ position }) => {
       <h2>Hero controls</h2>
       <RangeInput
         labelName="Speed"
-        min={1}
-        max={5}
-        step={1}
+        min={0}
+        max={3}
+        step={0.5}
         id={`speed-${position}`}
+        initialValue={heroStore.heroSettings[position].heroSpeed}
         onChange={handleSpeedChange}
       />
       <RangeInput
-        labelName="Fire Rate"
-        min={300}
-        max={2000}
-        step={100}
+        labelName="Fire Rate (per min)"
+        min={0}
+        max={100}
+        step={10}
         id={`fire-rate-${position}`}
+        initialValue={heroStore.heroSettings[position].fireRate}
         onChange={handleFireRateChange}
       />
     </div>
