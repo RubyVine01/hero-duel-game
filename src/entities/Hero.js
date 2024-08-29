@@ -17,7 +17,7 @@ export default class Hero {
     this.score = settings.score;
     this.isHit = false;
     this.hitEffectDuration = 0;
-    this.spellСolor = settings.spellСolor;
+    this.spellColor = settings.spellColor;
   }
 
   drawCircle(x, y, radius, color) {
@@ -73,17 +73,18 @@ export default class Hero {
     const distance = Math.sqrt(dx * dx + dy * dy);
 
     if (distance < this.radius + 10) {
-      this.direction = dx > 0 ? -1 : 1;
+      if (Math.abs(dx) > Math.abs(dy)) {
+        this.direction = dx > 0 ? -1 : 1;
+      } else {
+        this.direction = dy > 0 ? -1 : 1;
+      }
       if (this.y + this.radius > this.context.canvas.height) {
         this.y = this.context.canvas.height - this.radius;
       }
       if (this.y - this.radius < 0) {
         this.y = this.radius;
       }
-
-      return true;
     }
-    return false;
   }
 
   updateSettings(newSettings) {
@@ -111,7 +112,7 @@ export default class Hero {
         this.y,
         direction,
         this.settings,
-        this.spellСolor
+        this.spellColor
       )
     );
   }
@@ -137,8 +138,7 @@ export default class Hero {
 
   hit() {
     this.isHit = true;
-    this.hitEffectDuration = 10; // Длительность эффекта удара
-    // this.score += 1;
+    this.hitEffectDuration = 10;
     heroStore.incrementScore(this.settings.scoreSide);
   }
 }

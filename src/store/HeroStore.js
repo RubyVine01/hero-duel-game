@@ -6,7 +6,7 @@ class HeroStore {
       heroSpeed: 0,
       heroColor: "#3498db",
       fireRate: 0,
-      spellСolor: "#FFA500",
+      spellColor: "#FFA500",
       side: "left",
       score: 0,
       scoreSide: "right",
@@ -15,7 +15,7 @@ class HeroStore {
       heroSpeed: 0,
       heroColor: "#b41abc",
       fireRate: 0,
-      spellСolor: "#32CD32",
+      spellColor: "#32CD32",
       side: "right",
       score: 0,
       scoreSide: "left",
@@ -39,7 +39,7 @@ class HeroStore {
   }
 
   setHeroSpellColor(side, spellColor) {
-    this.heroSettings[side].spellСolor = spellColor;
+    this.heroSettings[side].spellColor = spellColor;
   }
   incrementScore(side) {
     this.heroSettings[side].score += 1;
