@@ -7,7 +7,7 @@ import ScoreBoard from "../ScoreBoard/ScoreBoard";
 function App() {
   return (
     <div className="app">
-      <ScoreBoard  />
+      <ScoreBoard />
       <DuelGame />
       <div className="controls-container">
         <HeroControls position={heroStore.heroSettings["left"].side} />

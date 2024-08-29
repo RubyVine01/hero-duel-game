@@ -1,9 +1,16 @@
 import { useEffect, useState } from "react";
 import "./RangeInput.css";
 
-const RangeInput = ({ id, labelName, min, max, onChange, step, initialValue }) => {
+const RangeInput = ({
+  id,
+  labelName,
+  min,
+  max,
+  onChange,
+  step,
+  initialValue,
+}) => {
   const [rangeValue, setRangeValue] = useState(min);
-
 
   useEffect(() => {
     setRangeValue(initialValue);

@@ -1,22 +1,10 @@
 import { useState } from "react";
 import heroStore from "../../store/HeroStore";
 import "./HeroPopupMenu.css";
-
-const colors = [
-  "#FF4500",
-  "#1E90FF",
-  "#32CD32",
-  "#FF69B4",
-  "#FFA500",
-  "#00CED1",
-  "#00FF7F",
-  "#8A2BE2",
-  "#FFD700",
-  "#FF6347",
-];
+import { colorSpellArray } from "../../constants/colorSpellArray";
 
 const HeroPopupMenu = ({ heroSide, onClose }) => {
-  const [selectedColor, setSelectedColor] = useState(colors[0]);
+  const [selectedColor, setSelectedColor] = useState(colorSpellArray[0]);
 
   const handleColorChange = (e) => {
     setSelectedColor(e.target.value);
@@ -31,7 +19,7 @@ const HeroPopupMenu = ({ heroSide, onClose }) => {
     <div className="hero-popup-menu">
       <h3>{`Change Spell Color (${heroSide})`}</h3>
       <div className="radio-group">
-        {colors.map((color, index) => (
+        {colorSpellArray.map((color, index) => (
           <label key={index} className="radio-label">
             <input
               type="radio"
@@ -62,4 +50,3 @@ const HeroPopupMenu = ({ heroSide, onClose }) => {
 };
 
 export default HeroPopupMenu;
-

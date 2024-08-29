@@ -15,6 +15,7 @@
     "gh-pages": "^6.1.1",
     "mobx": "^6.13.1",
     "mobx-react-lite": "^4.0.7",
+    "normalize.css": "^8.0.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1"
   },

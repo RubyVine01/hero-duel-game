@@ -35,6 +35,7 @@ const DuelGame = observer(() => {
       heroStore.heroSettings.right
     );
 
+    // отслеживает и обновляет позицию курсора на поле Canvas
     const handleMouseMove = (e) => {
       const rect = canvas.getBoundingClientRect();
       const mouseX = e.clientX - rect.left;
@@ -42,6 +43,7 @@ const DuelGame = observer(() => {
       mousePosition.current = { x: mouseX, y: mouseY };
     };
 
+    // открытие popup настройки заклинаний
     const handleMouseClick = () => {
       if (leftHeroRef.current.checkMouseCollision(mousePosition.current)) {
         setPopupState({ isVisible: true, heroSide: "left" });
@@ -52,6 +54,7 @@ const DuelGame = observer(() => {
       }
     };
 
+    // анимации игры
     const animate = () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -61,7 +64,6 @@ const DuelGame = observer(() => {
       rightHeroRef.current.update(leftHeroRef.current);
       leftHeroRef.current.draw();
       rightHeroRef.current.draw();
-
       leftHeroRef.current.checkSpellsCollision(rightHeroRef.current);
       rightHeroRef.current.checkSpellsCollision(leftHeroRef.current);
 
@@ -77,6 +79,7 @@ const DuelGame = observer(() => {
     };
   }, []);
 
+  // следит за обновлением параметров
   useEffect(() => {
     if (leftHeroRef.current) {
       leftHeroRef.current.updateSettings(heroStore.heroSettings.left);
@@ -91,6 +94,7 @@ const DuelGame = observer(() => {
     heroStore.heroSettings.right.fireRate,
   ]);
 
+  // закрытие Popup
   const handleClosePopup = () => {
     setPopupState({ isVisible: false, heroSide: null });
   };

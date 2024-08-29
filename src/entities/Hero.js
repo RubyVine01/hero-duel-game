@@ -20,6 +20,7 @@ export default class Hero {
     this.spellColor = settings.spellColor;
   }
 
+  // рисование круга
   drawCircle(x, y, radius, color) {
     this.context.beginPath();
     this.context.arc(x, y, radius, 0, Math.PI * 2, false);
@@ -28,6 +29,7 @@ export default class Hero {
     this.context.closePath();
   }
 
+  // отрисовка героя в Canvas
   draw() {
     this.drawCircle(this.x, this.y, this.radius, this.heroColor);
     this.drawCircle(this.x, this.y, this.radius / 2, "white");
@@ -43,6 +45,7 @@ export default class Hero {
     this.handleHitEffect();
   }
 
+  // обновляет стостояние героя
   update(opponent) {
     this.y += this.heroSpeed * this.direction;
 
@@ -67,6 +70,7 @@ export default class Hero {
     this.handleHitEffect();
   }
 
+  // проверяет, находится ли курсор в пределах героя
   checkMouseCollision(mousePosition) {
     const dx = mousePosition.x - this.x;
     const dy = mousePosition.y - this.y;
@@ -88,6 +92,7 @@ export default class Hero {
     }
   }
 
+  // обновляет настройки героя
   updateSettings(newSettings) {
     for (const [key, value] of Object.entries(newSettings)) {
       if (value !== undefined && key in this) {
@@ -96,6 +101,7 @@ export default class Hero {
     }
   }
 
+  // создает новое заклинание
   shoot(opponent) {
     const direction = this.x < opponent.x ? 1 : -1;
 
@@ -118,6 +124,7 @@ export default class Hero {
     );
   }
 
+  // првоеряет столкновение заклинания с героем
   checkSpellsCollision(opponent) {
     this.spells.forEach((spell) => {
       if (spell.checkCollision(opponent)) {
@@ -128,6 +135,7 @@ export default class Hero {
     });
   }
 
+  // отображает эффект удара
   handleHitEffect() {
     if (this.hitEffectDuration > 0) {
       this.hitEffectDuration -= 1;
@@ -137,6 +145,7 @@ export default class Hero {
     }
   }
 
+  // отслеживает и считает удары
   hit() {
     this.isHit = true;
     this.hitEffectDuration = 10;

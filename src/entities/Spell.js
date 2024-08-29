@@ -11,6 +11,7 @@ export default class Spell {
     this.settings = settings;
   }
 
+  // обновляет позицию заклинания
   update() {
     this.x += this.speed * this.direction;
     if (this.x < 0 || this.x > this.context.canvas.width) {
@@ -19,6 +20,7 @@ export default class Spell {
     }
   }
 
+  // отрисовывает заклинания
   draw() {
     this.context.beginPath();
     this.context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
@@ -27,6 +29,7 @@ export default class Spell {
     this.context.closePath();
   }
 
+  // Проверяет столкновение заклинания с заданной целью 
   checkCollision(target) {
     const dx = this.x - target.x;
     const dy = this.y - target.y;
@@ -34,6 +37,7 @@ export default class Spell {
     return distance < this.radius + target.radius;
   }
 
+  // Отвечает за визуализацию взрыва заклинания
   explode() {
     const explosionRadius = this.radius * 3;
     this.context.beginPath();
