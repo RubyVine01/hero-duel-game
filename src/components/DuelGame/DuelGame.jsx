@@ -1,8 +1,9 @@
 import { observer } from "mobx-react-lite";
 import "./DuelGame.css";
 import Hero from "../../entities/Hero";
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import heroStore from "../../store/HeroStore";
+import HeroPopupMenu from "../HeroPopupMenu/HeroPopupMenu";
 
 const DuelGame = observer(() => {
   const canvasRef = useRef();
@@ -10,6 +11,9 @@ const DuelGame = observer(() => {
   const rightHeroRef = useRef();
 
   const mousePosition = useRef({ x: 0, y: 0 });
+
+  const [isPopupVisible, setPopupVisible] = useState(false);
+  const [selectedHeroSide, setSelectedHeroSide] = useState(null);
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -37,6 +41,18 @@ const DuelGame = observer(() => {
       };
     };
 
+    const handleMouseClick = () => {
+      if (leftHeroRef.current.checkMouseCollision(mousePosition.current)) {
+        setSelectedHeroSide("left");
+        setPopupVisible(true);
+      } else if (
+        rightHeroRef.current.checkMouseCollision(mousePosition.current)
+      ) {
+        setSelectedHeroSide("right");
+        setPopupVisible(true);
+      }
+    };
+
     const animate = () => {
       context.clearRect(0, 0, canvas.width, canvas.height);
 
@@ -52,12 +68,13 @@ const DuelGame = observer(() => {
 
       requestAnimationFrame(animate);
     };
-
+    canvas.addEventListener("click", handleMouseClick);
     canvas.addEventListener("mousemove", handleMouseMove);
     animate();
 
     return () => {
       canvas.removeEventListener("mousemove", handleMouseMove);
+      canvas.removeEventListener("click", handleMouseClick);
     };
   }, []);
 
@@ -75,8 +92,19 @@ const DuelGame = observer(() => {
     heroStore.heroSettings.right.fireRate,
   ]);
 
+  const handleClosePopup = () => {
+    setPopupVisible(false);
+    setSelectedHeroSide(null);
+  };
+  
   return (
-    <canvas ref={canvasRef} width={800} height={400} className="playground" />
+    <>
+      <canvas ref={canvasRef} width={800} height={400} className="playground" />
+
+      {isPopupVisible && ( 
+        <HeroPopupMenu heroSide={selectedHeroSide} onClose={handleClosePopup} /> 
+      )}
+    </>
   );
 });
 
