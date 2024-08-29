@@ -20,19 +20,17 @@ export default class Hero {
     this.spellСolor = settings.spellСolor;
   }
 
-  draw() {
+  drawCircle(x, y, radius, color) {
     this.context.beginPath();
-    this.context.arc(this.x, this.y, this.radius, 0, Math.PI * 2, false);
-    this.context.fillStyle = this.heroColor;
-    this.context.stroke();
+    this.context.arc(x, y, radius, 0, Math.PI * 2, false);
+    this.context.fillStyle = color;
     this.context.fill();
     this.context.closePath();
+  }
 
-    this.context.beginPath();
-    this.context.arc(this.x, this.y, this.radius/2, 0, Math.PI * 2, false);
-    this.context.fillStyle = "white";
-    this.context.fill();
-    this.context.closePath();
+  draw() {
+    this.drawCircle(this.x, this.y, this.radius, this.heroColor);
+    this.drawCircle(this.x, this.y, this.radius / 2, "white");
 
     this.spells.forEach((spell, index) => {
       if (spell.isActive) {
@@ -42,12 +40,7 @@ export default class Hero {
         this.spells.splice(index, 1);
       }
     });
-    if (this.hitEffectDuration > 0) {
-      this.hitEffectDuration -= 1;
-      if (this.hitEffectDuration === 0) {
-        this.isHit = false; // Отключаем эффект удара после завершения
-      }
-    }
+    this.handleHitEffect();
   }
 
   update(opponent) {
@@ -71,24 +64,16 @@ export default class Hero {
       this.lastShotTime = now;
     }
 
-    if (this.isHit && this.hitEffectDuration > 0) {
-      this.hitEffectDuration -= 1;
-      this.isHit = false;
-    } else {
-      this.isHit = false;
-    }
+    this.handleHitEffect();
   }
+
   checkMouseCollision(mousePosition) {
     const dx = mousePosition.x - this.x;
     const dy = mousePosition.y - this.y;
     const distance = Math.sqrt(dx * dx + dy * dy);
 
     if (distance < this.radius + 10) {
-      if (Math.abs(dx) > Math.abs(dy)) {
-        this.direction = dx > 0 ? -1 : 1;
-      } else {
-        this.direction = dy > 0 ? -1 : 1;
-      }
+      this.direction = dx > 0 ? -1 : 1;
       if (this.y + this.radius > this.context.canvas.height) {
         this.y = this.context.canvas.height - this.radius;
       }
@@ -96,16 +81,16 @@ export default class Hero {
         this.y = this.radius;
       }
 
-      return distance < this.radius + 10; 
+      return true;
     }
+    return false;
   }
 
   updateSettings(newSettings) {
-    if (newSettings.heroSpeed !== undefined) {
-      this.heroSpeed = newSettings.heroSpeed;
-    }
-    if (newSettings.fireRate !== undefined) {
-      this.fireRate = newSettings.fireRate;
+    for (const [key, value] of Object.entries(newSettings)) {
+      if (value !== undefined && key in this) {
+        this[key] = value;
+      }
     }
   }
 
@@ -139,6 +124,15 @@ export default class Hero {
         spell.isActive = false;
       }
     });
+  }
+
+  handleHitEffect() {
+    if (this.hitEffectDuration > 0) {
+      this.hitEffectDuration -= 1;
+      if (this.hitEffectDuration === 0) {
+        this.isHit = false;
+      }
+    }
   }
 
   hit() {

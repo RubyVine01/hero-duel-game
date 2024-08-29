@@ -12,8 +12,10 @@ const DuelGame = observer(() => {
 
   const mousePosition = useRef({ x: 0, y: 0 });
 
-  const [isPopupVisible, setPopupVisible] = useState(false);
-  const [selectedHeroSide, setSelectedHeroSide] = useState(null);
+  const [popupState, setPopupState] = useState({
+    isVisible: false,
+    heroSide: null,
+  });
 
   useEffect(() => {
     const canvas = canvasRef.current;
@@ -35,21 +37,18 @@ const DuelGame = observer(() => {
 
     const handleMouseMove = (e) => {
       const rect = canvas.getBoundingClientRect();
-      mousePosition.current = {
-        x: e.clientX - rect.left,
-        y: e.clientY - rect.top,
-      };
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      mousePosition.current = { x: mouseX, y: mouseY };
     };
 
     const handleMouseClick = () => {
       if (leftHeroRef.current.checkMouseCollision(mousePosition.current)) {
-        setSelectedHeroSide("left");
-        setPopupVisible(true);
+        setPopupState({ isVisible: true, heroSide: "left" });
       } else if (
         rightHeroRef.current.checkMouseCollision(mousePosition.current)
       ) {
-        setSelectedHeroSide("right");
-        setPopupVisible(true);
+        setPopupState({ isVisible: true, heroSide: "right" });
       }
     };
 
@@ -93,16 +92,17 @@ const DuelGame = observer(() => {
   ]);
 
   const handleClosePopup = () => {
-    setPopupVisible(false);
-    setSelectedHeroSide(null);
+    setPopupState({ isVisible: false, heroSide: null });
   };
-  
+
   return (
     <>
       <canvas ref={canvasRef} width={800} height={400} className="playground" />
-
-      {isPopupVisible && ( 
-        <HeroPopupMenu heroSide={selectedHeroSide} onClose={handleClosePopup} /> 
+      {popupState.isVisible && (
+        <HeroPopupMenu
+          heroSide={popupState.heroSide}
+          onClose={handleClosePopup}
+        />
       )}
     </>
   );
