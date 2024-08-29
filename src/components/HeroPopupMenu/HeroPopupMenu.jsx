@@ -29,7 +29,7 @@ const HeroPopupMenu = ({ heroSide, onClose }) => {
 
   return (
     <div className="hero-popup-menu">
-      <h3>Change Spell Color</h3>
+      <h3>{`Change Spell Color (${heroSide})`}</h3>
       <div className="radio-group">
         {colors.map((color, index) => (
           <label key={index} className="radio-label">
@@ -62,5 +62,4 @@ const HeroPopupMenu = ({ heroSide, onClose }) => {
 };
 
 export default HeroPopupMenu;
-
 
