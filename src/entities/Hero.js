@@ -84,6 +84,7 @@ export default class Hero {
       if (this.y - this.radius < 0) {
         this.y = this.radius;
       }
+      return distance < this.radius + 10;
     }
   }
 
